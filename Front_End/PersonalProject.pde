@@ -63,9 +63,8 @@ boolean sigma(float data[], float val){ //evaluate standard deviation
   diff = val-avg;
   
   sigmas = diff/stdev;
-  println(sigmas);
-  if (abs(sigmas) > 3){
-    println("rabbtit");
+
+  if (abs(sigmas) > 3){ //greater than 3 sigma distance means abnormal
     return (true);
   }else{
     return (false);
