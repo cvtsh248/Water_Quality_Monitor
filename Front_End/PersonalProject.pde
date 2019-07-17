@@ -45,14 +45,38 @@ float std(float data[]) { //function to calculate standard deviation
   return (stdev);
 }
 
+boolean sigma(float data[], float val){ //evaluate standard deviation
+  float stdev = std(data);
+  float avg = 0;
+  float nans = 0; //count how many nan
+  float diff = 0;
+  float sigmas = 0;
+  for (int i = 0; i < data.length; i++) { //calculating average
+    if (Float.isNaN(data[i])==false){
+      avg += data[i];
+    }
+    if (Float.isNaN(data[i])==true){
+      nans+=1;
+    }
+  }
+  avg /= (data.length-nans);
+  diff = val-avg;
+  
+  sigmas = diff/stdev;
+  println(sigmas);
+  if (abs(sigmas) > 3){
+    println("rabbtit");
+    return (true);
+  }else{
+    return (false);
+  }
+}
 
 
 String buff[] = {""}; //reseting file
 float Buff[] = {}; //for reseting lists
 float tds[] = {}; //tds values
 float turbidity[] = {}; //turbidty values
-float deviation[] = {}; //standard deviation list (tds)
-float deviation_t[] = {}; //standard deviation list (tubidity)
 String val = null; //buffer for tds
 String val_t = null; //buffer for turbidity
 boolean c = false; //calibration mode
@@ -60,8 +84,6 @@ boolean range = true; //in acceptable range of standard deviation or not (tds)
 boolean range_t = true; //same as range but for turbidity 
 float s = 0; //variable containing standard deviation for tds
 float s_t = 0; //standard deviation for turbidity
-float sOfs = 0; //standard deviation of standard deviation list for tds
-float sOfs_t = 0; //standard deviation of standard deviation for turbidity
 String [] lines; //open file for tds
 String [] lines_t; //open file for turbidity
 
@@ -76,16 +98,16 @@ void setup() {
   
   //gui elements
   cp5 = new ControlP5(this);
-  cp5.addButton("TDS").setValue(0).setPosition(20,20).setSize(90,40);
-  cp5.addButton("Save").setValue(0).setPosition(20,80).setSize(90,40);
-  cp5.addButton("Reset").setValue(0).setPosition(20,140).setSize(90,40);
+  cp5.addButton("TDS").setValue(0).setPosition(20,40).setSize(90,40);
+  cp5.addButton("Save").setValue(0).setPosition(20,100).setSize(90,40);
+  cp5.addButton("Reset").setValue(0).setPosition(20,160).setSize(90,40);
   
   for (int i = 0; i < lines.length; i++){
-    deviation = append(deviation,float(lines[i]));
+    tds = append(tds,float(lines[i]));
   }
   
   for (int i = 0; i < lines_t.length; i++){
-    deviation_t = append(deviation,float(lines_t[i]));
+    turbidity = append(turbidity,float(lines_t[i]));
   }
   
 }
@@ -106,15 +128,13 @@ void draw() { //begin application
   }
   text("Standard Deviation:",160,70); //lines 82&83 are responsible for displaying standard deviation
   text(String.format("%.5f", s),290,70);
-  text("Change in Standard Deviation:",160,95);
-  text(String.format("%.5f", sOfs),340,95);
 
-  text("Abnormal:",160,120); //check for abnormality (i.e. outside acceptable difference based on standard deviation)
+  text("Abnormal:",160,95); //check for abnormality (i.e. outside acceptable difference based on standard deviation)
   if (range == true){ //uses the boolean function within_range()... Look at bool within_range() for more info. 
-    text("False",230,120);
+    text("true",230,95);
   }
   if (range == false){
-    text("True",230,120);
+    text("false",230,95);
   }
   
   //turbidty
@@ -130,15 +150,13 @@ void draw() { //begin application
   }
   text("Standard Deviation:",160,175); //lines 82&83 are responsible for displaying standard deviation
   text(String.format("%.5f", s_t),290,175);
-  text("Change in Standard Deviation:",160,200);
-  text(String.format("%.5f", sOfs_t),340,200);
 
-  text("Abnormal:",160,225); //check for abnormality (i.e. outside acceptable difference based on standard deviation)
+  text("Abnormal:",160,200); //check for abnormality (i.e. outside acceptable difference based on standard deviation)
   if (range_t == true){ //uses the boolean function within_range()... Look at bool within_range() for more info. 
-    text("False",230,225);
+    text("true",230,200);
   }
   if (range_t == false){
-    text("True",230,225);
+    text("false",230,200);
   }
   
 }
@@ -161,58 +179,29 @@ public void TDS() { //TDS button function
 
 public void Save() { //Save the data to a list (eventually will append to a file)
   //tds
+  range = sigma(tds,float(val)); //calculating abnormality
+  
   if (Float.isNaN(float(val)) == false){
       tds = append(tds, float(val));
-  }
-  if(Float.isNaN(s) == false){
-    deviation = append(deviation, s); //standard deviation of standard deviation
-    lines = append(lines, str(s));
-    saveStrings("log_tds.txt", lines);
+      lines = append(lines, str(float(val)));
+      saveStrings("log_tds.txt", lines);
   }
 
-  if (deviation.length > 0 && Float.isNaN(s) == false){
-    sOfs = std(deviation);
-
-    if(Float.isNaN(sOfs) == true){
-      sOfs = 0;
-    }
-
-  }
-  if (sOfs > 0.2){ //if standard deviation of standard deviation is greater than 0.08, there is a problem
-    range = false;
-  }
-  if (sOfs < 0.2){
-    range = true;
-  }
+  
   //turbidty
+  range_t = sigma(turbidity,float(val_t));
   if (Float.isNaN(float(val_t)) == false){
       turbidity = append(turbidity, float(val_t));
-  }
-  if(Float.isNaN(s_t) == false){
-    deviation_t = append(deviation_t, s_t); //standard deviation of standard deviation
-    lines_t = append(lines_t, str(s_t));
-    saveStrings("log_turb.txt", lines_t);
+      lines_t = append(lines, str(float(val_t)));
+      saveStrings("log_turb.txt", lines_t);
   }
 
-  if (deviation_t.length > 0 && Float.isNaN(s_t) == false){
-    sOfs_t = std(deviation_t);
-    if(Float.isNaN(sOfs_t) == true){
-      sOfs_t = 0;
-    }
-
-  }
-  if (sOfs_t > 0.2){ //if standard deviation of standard deviation is greater than 0.08, there is a problem
-    range_t = false;
-  }
-  if (sOfs < 0.2){
-    range_t = true;
-  }
+  
 }
 
 public void Reset() { //Reset after abnormality
     saveStrings("log_tds.txt", buff);
     saveStrings("log_tds.txt", buff);
-    deviation = Buff;
     tds = Buff;
     turbidity = Buff;
   
