@@ -90,7 +90,7 @@ String [] lines_t; //open file for turbidity
 void setup() {
   size(400,400);
   
-  arduino = new Serial (this, "/dev/ttyACM0", 9600); //initialising arduino serial connection
+  arduino = new Serial (this, "/dev/ttyACM0", 9600); //initialising arduino serial connection, replace "/dev/ttyACM0" with appropriate device file
   arduino.bufferUntil( '\n' );
   
   lines = loadStrings("log_tds.txt"); //load save file for tds
