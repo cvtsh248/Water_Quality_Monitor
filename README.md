@@ -7,7 +7,7 @@ The system currently monitors total dissolved solids (TDS) and turbidity using h
 # Components Required
 More information regarding the construction of the sensors and circuitry is in the [wiki](https://github.com/cvtsh248/Water_Quality_Monitor/wiki).
 * Computer with functional USB ports.
-* Arduino UNO (This is the model I used, but any Arduino should work)
+* Arduino UNO (This is the microcontroller I used, but any microcontroller with arduino IDE support should work)
 * Resistors (10kΩ, 3.3kΩ, 100Ω, 20kΩ), note that you may need resistors of other values, more information is provided in the [wiki](https://github.com/cvtsh248/Water_Quality_Monitor/wiki)
 * Wire
 * Red LED (for the turbidity sensor)
