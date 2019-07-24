@@ -79,7 +79,6 @@ float tds[] = {}; //tds values
 float turbidity[] = {}; //turbidty values
 String val = null; //buffer for tds
 String val_t = null; //buffer for turbidity
-boolean c = false; //calibration mode
 boolean range = true; //in acceptable range of standard deviation or not (tds)
 boolean range_t = true; //same as range but for turbidity 
 float s = 0; //variable containing standard deviation for tds
@@ -90,7 +89,7 @@ String [] lines_t; //open file for turbidity
 void setup() {
   size(400,400);
   
-  arduino = new Serial (this, "/dev/ttyACM0", 9600); //initialising arduino serial connection, replace "/dev/ttyACM0" with appropriate device file
+  arduino = new Serial (this, "/dev/ttyACM0", 9600); //initialising arduino serial connection
   arduino.bufferUntil( '\n' );
   
   lines = loadStrings("log_tds.txt"); //load save file for tds
@@ -117,11 +116,10 @@ void draw() { //begin application
   //tds
   background(0); //refresh background
   text("Value of TDS:",160,45);
-  if (tds.length > 0 && c == true){
-    text(val,250,45); //display tds value, in calibration mode: taking value from tds buffer array
-  }
-  if (c == false && val != null){
-    text(float(val),250,45); //display tds value when not in calibration mode
+  if (tds.length > 0 && val != null){
+    //text(float(val),250,45); //display tds value, in calibration mode: taking value from tds buffer array
+    //text(float(val)*m+c,250,45); //<If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
+    
   }
   if (val != null){
     s = std(tds); //calculate standard deviation of the tds array
@@ -139,11 +137,9 @@ void draw() { //begin application
   
   //turbidty
   text("Value of turbidity:",160,150);
-  if (turbidity.length > 0 && c == true){
-    text(val_t,280,150); //display tds value, in calibration mode: taking value from tds buffer array
-  }
-  if (c == false && val_t != null){
-    text(float(val_t),280,150); //display tds value when not in calibration mode
+  if (turbidity.length > 0 && val_t != null){
+    text(float(val_t),280,150); //display tds value, in calibration mode: taking value from tds buffer array
+    //text(float(val_t)*m+c,250,45); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
   }
   if (val_t != null){
     s_t = std(turbidity); //calculate standard deviation of the tds array
@@ -184,6 +180,7 @@ public void Save() { //Save the data to a list (eventually will append to a file
       tds = append(tds, float(val));
       //tds = append(tds, (float(val)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
       lines = append(lines, str(float(val)));
+      //lines = append(lines, str(float(val)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
       saveStrings("log_tds.txt", lines);
   }
 
@@ -194,6 +191,7 @@ public void Save() { //Save the data to a list (eventually will append to a file
       turbidity = append(turbidity, float(val_t));
       //turbidity = append(turbidity, (float(val_t)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
       lines_t = append(lines_t, str(float(val_t)));
+      //lines_t = append(lines_t, str(float(val)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
       saveStrings("log_turb.txt", lines_t);
   }
   
