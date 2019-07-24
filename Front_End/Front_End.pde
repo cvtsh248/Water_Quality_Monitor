@@ -65,7 +65,6 @@ boolean sigma(float data[], float val){ //evaluate standard deviation
   sigmas = diff/stdev;
   println(sigmas);
   if (abs(sigmas) > 3){
-    println("rabbtit");
     return (true);
   }else{
     return (false);
@@ -97,7 +96,7 @@ void setup() {
   
   //gui elements
   cp5 = new ControlP5(this);
-  cp5.addButton("TDS").setValue(0).setPosition(20,40).setSize(90,40);
+  cp5.addButton("Data").setValue(0).setPosition(20,40).setSize(90,40);
   cp5.addButton("Save").setValue(0).setPosition(20,100).setSize(90,40);
   cp5.addButton("Reset").setValue(0).setPosition(20,160).setSize(90,40);
   
@@ -159,7 +158,7 @@ void draw() { //begin application
 }
 
 //buttons galore
-public void TDS() { //TDS button function
+public void Data() { //receive data button function
   
   arduino.write('d'); //send the char 'd' to the arduino
   delay(15);
