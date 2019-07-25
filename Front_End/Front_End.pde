@@ -1,12 +1,12 @@
 //Front End
 
 /*
-TO DO:
-1. Implement storing of data locally [DONE]
-2. Add turbidity functionality (also need to work on back end) [DONE]
-3. Convert TDS to PPM (maybe, not compulsory as of now given the nature of the project) [NOT DONE]
-4. Work on fixing tds data receiving. Try to remove the need of spamming the button. [NOT DONE]
-4. Improve GUI? [NOT DONE]
+
+This is the front end.
+This works in unison with the back end.
+Only edit lines that ask you to,
+if you don't want to break anything.
+
 */
 
 import controlP5.*;
