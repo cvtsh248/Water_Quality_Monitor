@@ -142,7 +142,7 @@ void draw() { //begin application
     text(float(val_t),280,150); //display tds value, in calibration mode: taking value from tds buffer array
     //text(float(val_t)*m+c,250,45); <If you have calibration data (linear), uncomment this line and comment out line 142, replace m with gradient and c with constant and remove this text>
     //text(a*pow(float(val_t),exp)+c,250,45); <If you have calibration data (exponential), uncomment this line and comment out line 142, replace exp with the exponent and c with constant and remove this text>
-    //text(a*pow(float(val_t),2)+b*(float(val))+c,250,45); <If you have calibration data (quadratic), uncomment this line and comment out line 142, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
+    //text(a*pow(float(val_t),2)+b*(float(val_t))+c,250,45); <If you have calibration data (quadratic), uncomment this line and comment out line 142, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
   }
   if (val_t != null){
     s_t = std(turbidity); //calculate standard deviation of the tds array
