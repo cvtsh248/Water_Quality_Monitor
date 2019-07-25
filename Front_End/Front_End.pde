@@ -78,8 +78,8 @@ float tds[] = {}; //tds values
 float turbidity[] = {}; //turbidty values
 String val = null; //buffer for tds
 String val_t = null; //buffer for turbidity
-boolean range = true; //in acceptable range of standard deviation or not (tds)
-boolean range_t = true; //same as range but for turbidity 
+boolean range = false; //in acceptable range of standard deviation or not (tds)
+boolean range_t = false; //same as range but for turbidity 
 float s = 0; //variable containing standard deviation for tds
 float s_t = 0; //standard deviation for turbidity
 String [] lines; //open file for tds
@@ -116,8 +116,10 @@ void draw() { //begin application
   background(0); //refresh background
   text("Value of TDS:",160,45);
   if (tds.length > 0 && val != null){
-    //text(float(val),250,45); //display tds value, in calibration mode: taking value from tds buffer array
-    //text(float(val)*m+c,250,45); //<If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
+    text(float(val),250,45); //display tds value, in calibration mode: taking value from tds buffer array
+    //text(float(val)*m+c,250,45); <If you have calibration data (linear), uncomment this line and comment out line 119, replace m with gradient and c with constant and remove this text>
+    //text(a*pow(float(val),exp)+c,250,45); <If you have calibration data (exponential), uncomment this line and comment out line 119, replace exp with the exponent and c with constant and remove this text>
+    //text(a*pow(float(val),2)+b*(float(val))+c,250,45); <If you have calibration data (quadratic), uncomment this line and comment out line 119, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
     
   }
   if (val != null){
@@ -138,7 +140,9 @@ void draw() { //begin application
   text("Value of turbidity:",160,150);
   if (turbidity.length > 0 && val_t != null){
     text(float(val_t),280,150); //display tds value, in calibration mode: taking value from tds buffer array
-    //text(float(val_t)*m+c,250,45); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
+    //text(float(val_t)*m+c,250,45); <If you have calibration data (linear), uncomment this line and comment out line 142, replace m with gradient and c with constant and remove this text>
+    //text(a*pow(float(val_t),exp)+c,250,45); <If you have calibration data (exponential), uncomment this line and comment out line 142, replace exp with the exponent and c with constant and remove this text>
+    //text(a*pow(float(val_t),2)+b*(float(val))+c,250,45); <If you have calibration data (quadratic), uncomment this line and comment out line 142, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
   }
   if (val_t != null){
     s_t = std(turbidity); //calculate standard deviation of the tds array
@@ -177,9 +181,13 @@ public void Save() { //Save the data to a list (eventually will append to a file
   
   if (Float.isNaN(float(val)) == false){
       tds = append(tds, float(val));
-      //tds = append(tds, (float(val)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
+      //tds = append(tds, (float(val)*m+c)); <If you have calibration data (linear), uncomment this line and comment out line 183, replace m with gradient and c with constant and remove this text>
+      //tds = append(tds, (a*pow(float(val),exp)+c)); <If you have calibration data (exponential), uncomment this line and comment out line 183, replace exp with the exponent and c with constant and remove this text>
+      //tds = append(tds, (a*pow(float(val),2)+b*(float(val))+c,250,45); <If you have calibration data (quadratic), uncomment this line and comment out line 183, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
       lines = append(lines, str(float(val)));
-      //lines = append(lines, str(float(val)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
+      //lines = append(lines, str((float(val)*m+c))); <If you have calibration data (linear), uncomment this line and comment out line 187, replace m with gradient and c with constant and remove this text>
+      //lines = append(lines, str((a*pow(float(val),exp)+c))); <If you have calibration data (exponential), uncomment this line and comment out line 187, replace exp with the exponent and c with constant and remove this text>
+      //lines = append(lines, str((a*pow(float(val),2)+b*(float(val)))); <If you have calibration data (quadratic), uncomment this line and comment out line 187, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
       saveStrings("log_tds.txt", lines);
   }
 
@@ -188,9 +196,13 @@ public void Save() { //Save the data to a list (eventually will append to a file
   range_t = sigma(turbidity,float(val_t));
   if (Float.isNaN(float(val_t)) == false){
       turbidity = append(turbidity, float(val_t));
-      //turbidity = append(turbidity, (float(val_t)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
+      //turbidity = append(turbidity, (float(val_t)*m+c)); <If you have calibration data (linear), uncomment this line and comment out line 198, replace m with gradient and c with constant and remove this text>
+      //turbidity = append(turbidity, (a*pow(float(val_t),exp)+c)); <If you have calibration data (exponential), uncomment this line and comment out line 198, replace exp with the exponent and c with constant and remove this text>
+      //turbidity = append(turbidity, (a*pow(float(val_t),2)+b*(float(val))+c,250,45); <If you have calibration data (quadratic), uncomment this line and comment out line 198, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
       lines_t = append(lines_t, str(float(val_t)));
-      //lines_t = append(lines_t, str(float(val)*m+c)); <If you have calibration data, uncomment this line and comment the line above, replace m with gradient and c with constant and remove this text>
+      //lines_t = append(lines_t, str((float(val_t)*m+c))); <If you have calibration data (linear), uncomment this line and comment out line 202, replace m with gradient and c with constant and remove this text>
+      //lines_t = append(lines_t, str((a*pow(float(val_t),exp)+c))); <If you have calibration data (exponential), uncomment this line and comment out line 202, replace exp with the exponent and c with constant and remove this text>
+      //lines_t = append(lines_t, str((a*pow(float(val_t),2)+b*(float(val_t)))); <If you have calibration data (quadratic), uncomment this line and comment out line 202, replace a with the coefficient of x^2, b with the coefficient of x and c with constant and remove this text>
       saveStrings("log_turb.txt", lines_t);
   }
   
