@@ -2,12 +2,13 @@
 
 /*
  * TO DO:
- * 1. Add in turbidity functionality
- * 2. Calibrate sensor
+ * 1. Add in turbidity functionality [DONE]
+ * 2. Calibrate sensor [DONE]
  */
 
 void setup() {
   Serial.begin(9600);
+  analogReference(INTERNAL);
   pinMode(2, OUTPUT);
   pinMode(4, OUTPUT);
 
